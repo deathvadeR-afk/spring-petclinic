@@ -28,6 +28,7 @@ import org.springframework.validation.MapBindingResult;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -134,6 +135,31 @@ class PetValidatorTests {
 			assertTrue(errors.hasFieldErrors("name"));
 		}
 
+	}
+
+	@Test
+	void validateWithPetNameOfExactly30Characters() {
+		petType.setName(petTypeName);
+		pet.setName("abcdefghijklmnopqrstuvwxyzabcd");
+		pet.setType(petType);
+		pet.setBirthDate(petBirthDate);
+
+		petValidator.validate(pet, errors);
+
+		assertFalse(errors.hasFieldErrors("name"));
+	}
+
+	@Test
+	void validateWithPetNameOf31CharactersRejectsWithLengthMessage() {
+		petType.setName(petTypeName);
+		pet.setName("abcdefghijklmnopqrstuvwxyzabcde");
+		pet.setType(petType);
+		pet.setBirthDate(petBirthDate);
+
+		petValidator.validate(pet, errors);
+
+		assertTrue(errors.hasFieldErrors("name"));
+		assertEquals("Name must be no more than 30 characters", errors.getFieldError("name").getDefaultMessage());
 	}
 
 }
