@@ -43,7 +43,7 @@ public class PetValidator implements Validator {
 		if (!StringUtils.hasText(name)) {
 			errors.rejectValue("name", REQUIRED, REQUIRED);
 		}
-		else if (name.length() > MAX_NAME_LENGTH) {
+		else if (name.length() >= MAX_NAME_LENGTH) {
 			errors.rejectValue("name", "size", "Name must be no more than 30 characters");
 		}
 
