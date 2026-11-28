@@ -93,6 +93,17 @@ public class Owner extends Person {
 		this.telephone = telephone;
 	}
 
+	public String getFormattedTelephone() {
+		String phone = this.telephone;
+		if (phone == null) {
+			return "";
+		}
+		if (phone.matches("\\d{10}")) {
+			return "(" + phone.substring(0, 3) + ") " + phone.substring(3, 6) + "-" + phone.substring(6);
+		}
+		return phone;
+	}
+
 	public List<Pet> getPets() {
 		return this.pets;
 	}

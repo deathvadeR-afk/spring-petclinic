@@ -48,4 +48,44 @@ class OwnerTests {
 		assertEquals(1, owner.getPets().size());
 	}
 
+	@Test
+	void formattedTelephoneFormatsTenDigitTelephone() {
+		Owner owner = new Owner();
+		owner.setTelephone("6085551023");
+
+		assertEquals("(608) 555-1023", owner.getFormattedTelephone());
+	}
+
+	@Test
+	void formattedTelephoneReturnsElevenDigitTelephoneUnchanged() {
+		Owner owner = new Owner();
+		owner.setTelephone("16085551023");
+
+		assertEquals("16085551023", owner.getFormattedTelephone());
+	}
+
+	@Test
+	void formattedTelephoneReturnsTelephoneWithDashesUnchanged() {
+		Owner owner = new Owner();
+		owner.setTelephone("608-555-1023");
+
+		assertEquals("608-555-1023", owner.getFormattedTelephone());
+	}
+
+	@Test
+	void formattedTelephoneReturnsEmptyStringWhenMissing() {
+		Owner owner = new Owner();
+		owner.setTelephone(null);
+
+		assertEquals("", owner.getFormattedTelephone());
+	}
+
+	@Test
+	void formattedTelephoneReturnsEmptyStringWhenEmptyText() {
+		Owner owner = new Owner();
+		owner.setTelephone("");
+
+		assertEquals("", owner.getFormattedTelephone());
+	}
+
 }
