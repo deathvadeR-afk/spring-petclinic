@@ -30,6 +30,7 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class for {@link PetValidator}
@@ -65,6 +66,30 @@ class PetValidatorTests {
 	@Test
 	void supportsPetClass() {
 		assertTrue(petValidator.supports(Pet.class));
+	}
+
+	@Test
+	void validateAcceptsNameOfExactly30Characters() {
+		petType.setName(petTypeName);
+		pet.setName("abcdefghijklmnopqrstuvwxyzabcd");
+		pet.setType(petType);
+		pet.setBirthDate(petBirthDate);
+
+		petValidator.validate(pet, errors);
+
+		assertFalse(errors.hasFieldErrors("name"));
+	}
+
+	@Test
+	void validateRejectsNameOfExactly31CharactersWithMessage() {
+		petType.setName(petTypeName);
+		pet.setName("abcdefghijklmnopqrstuvwxyzabcde");
+		pet.setType(petType);
+		pet.setBirthDate(petBirthDate);
+
+		petValidator.validate(pet, errors);
+
+		assertEquals("Name must be no more than 30 characters", errors.getFieldError("name").getDefaultMessage());
 	}
 
 	@Test
