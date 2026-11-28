@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.owner;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledInNativeImage;
@@ -28,6 +29,7 @@ import org.springframework.validation.MapBindingResult;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -134,6 +136,33 @@ class PetValidatorTests {
 			assertTrue(errors.hasFieldErrors("name"));
 		}
 
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-5-1] accepts a 30-character pet name that was wrongly rejected")
+	void validateAcceptsThirtyCharacterName() {
+		petType.setName(petTypeName);
+		pet.setName("abcdefghijklmnopqrstuvwxyzabcd");
+		pet.setType(petType);
+		pet.setBirthDate(petBirthDate);
+
+		petValidator.validate(pet, errors);
+
+		assertFalse(errors.hasFieldErrors("name"));
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-5-2] rejects a 31-character pet name with the name length message")
+	void validateRejectsThirtyOneCharacterName() {
+		petType.setName(petTypeName);
+		pet.setName("abcdefghijklmnopqrstuvwxyzabcde");
+		pet.setType(petType);
+		pet.setBirthDate(petBirthDate);
+
+		petValidator.validate(pet, errors);
+
+		assertTrue(errors.hasFieldErrors("name"));
+		assertEquals("Name must be no more than 30 characters", errors.getFieldError("name").getDefaultMessage());
 	}
 
 }
