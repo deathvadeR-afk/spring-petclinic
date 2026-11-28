@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,6 +47,60 @@ class OwnerTests {
 		owner.addPet(pet);
 
 		assertEquals(1, owner.getPets().size());
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-9-1] Formats a 10-digit telephone into the parenthesised form")
+	void formatsTenDigitTelephoneIntoParenthesisedForm() {
+		Owner owner = new Owner();
+		owner.setTelephone("6085551023");
+
+		assertEquals("(608) 555-1023", owner.getFormattedTelephone());
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-9-2] Returns a 9-digit telephone unchanged")
+	void returnsNineDigitTelephoneUnchanged() {
+		Owner owner = new Owner();
+		owner.setTelephone("608555102");
+
+		assertEquals("608555102", owner.getFormattedTelephone());
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-9-3] Returns a 10-digit telephone containing dashes unchanged")
+	void returnsTenDigitTelephoneWithDashesUnchanged() {
+		Owner owner = new Owner();
+		owner.setTelephone("608-555-1023");
+
+		assertEquals("608-555-1023", owner.getFormattedTelephone());
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-9-4] Returns an empty stored telephone as an empty string")
+	void returnsEmptyStoredTelephoneAsEmptyString() {
+		Owner owner = new Owner();
+		owner.setTelephone("");
+
+		assertEquals("", owner.getFormattedTelephone());
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-9-5] Returns an empty string when the owner has no telephone")
+	void returnsEmptyStringWhenTelephoneMissing() {
+		Owner owner = new Owner();
+		owner.setTelephone(null);
+
+		assertEquals("", owner.getFormattedTelephone());
+	}
+
+	@Test
+	@DisplayName("[QP-SMPET-9-6] Formats a 10-digit telephone with no web layer or database started")
+	void formatsTelephoneWithoutSpringContext() {
+		Owner owner = new Owner();
+		owner.setTelephone("6085551023");
+
+		assertEquals("(608) 555-1023", owner.getFormattedTelephone());
 	}
 
 }
